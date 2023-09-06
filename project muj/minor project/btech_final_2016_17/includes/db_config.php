@@ -1,0 +1,16 @@
+<?php	
+//define('CLASS_PATH', '/home/instacom/public_html/classes/');
+
+$mysql_hostname = "localhost";  //it can be localhost
+
+$mysql_password = "";
+$mysql_user = "root";
+$mysql_database = "btech_final_2016_17";
+$conn = @mysql_connect($mysql_hostname, $mysql_user, $mysql_password);
+if($conn)
+{
+	$db_selected = mysql_select_db($mysql_database, $conn);
+}
+
+error_reporting(E_ALL ^ E_NOTICE);
+?>

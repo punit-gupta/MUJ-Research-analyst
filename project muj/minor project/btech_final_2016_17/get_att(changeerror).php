@@ -1,0 +1,333 @@
+<?php
+require_once('/includes/session.php');
+
+require_once ('/includes/functions.php');
+$today_date=date("Y-m-d");
+$error=''; // Variable To Store Error Message
+$client_ip_addr=get_client_ip();
+
+
+if (isset($_GET['entry_no'])) 
+{
+	$entry_no=$_GET['entry_no'];
+	$action=$_GET['action'];
+	if ($action==1)
+	{
+		// mark out code
+		$enroll=$_GET['enroll'];
+		$date_time=get_curdate_time();
+		$e_data=get_in_entry_details_stud($enroll);
+		$in_time=$e_data['in_time'];
+		$time_spent=get_timediff_in_sec($in_time,$date_time);
+		
+		$qry="UPDATE entry_details SET out_time='".$date_time."', duration=".$time_spent.", logout_terminal='".$client_ip_addr."' WHERE sr_no=".$entry_no.";";
+		mysql_query($qry); 
+		$qry1="delete from entry_list where enroll_no=$enroll";
+		mysql_query($qry1); 
+		mysql_close($connection); // Closing Connection
+		header("Location: ".$_SERVER['PHP_SELF']);
+
+	}
+	if ($action==2)
+	{	
+		// disapprove code
+		$enroll=$_GET['enroll'];
+		$date_time=get_curdate_time();
+		$query="update entry_details set out_time='".$date_time."',disapproved=1, logout_terminal='".$client_ip_addr."' where sr_no=$entry_no";
+		mysql_query($query); 
+		echo $qry1="delete from entry_list where enroll_no=$enroll";
+		mysql_query($qry1); 
+		$qry2="UPDATE student SET prev_entry_status=1 WHERE enroll_no=".$enroll.";";
+		mysql_query($qry2);
+		mysql_close($connection); // Closing Connection
+		header("Location: ".$_SERVER['PHP_SELF']);
+	}
+	if ($action==3)
+	{	
+		// temporarily left code
+		$enroll=$_GET['enroll'];
+		$date_time=get_curdate_time();
+		$query="update entry_details set temp_left='".$date_time."' where sr_no=$entry_no";
+		mysql_query($query); 
+		mysql_close($connection); // Closing Connection
+		header("Location: ".$_SERVER['PHP_SELF']);
+	}
+
+	if ($action==4)
+	{	
+		// mark in code
+		$enroll=$_GET['enroll'];
+		$date_time="00:00:00";
+		$query="update entry_details set temp_left='".$date_time."' where sr_no=$entry_no";
+		mysql_query($query); 
+		mysql_close($connection); // Closing Connection
+		header("Location: ".$_SERVER['PHP_SELF']);
+	}	
+}
+	
+if (isset($_POST['submit'])) 
+{
+	$date1=$_POST["demo1"];
+	$startDate = date("Y-m-d", strtotime($date1));
+	$date2=$_POST["demo2"];
+	$endDate = date("Y-m-d", strtotime($date2));
+	$entry_data=get_entry_detail($startDate,$endDate);
+	
+	$a=1;
+	// when dates entered
+}
+else
+{
+	$startDate = $today_date;
+	$endDate = "";
+	$entry_data=get_in_etry_details($startDate,$endDate);
+	$a=2;
+	// when dates not entered, current entries 
+}
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+ <script src="datetimepicker_css.js"></script>
+<script language="javascript" src="liveclock.js"></script>
+
+<script type="text/javascript">     
+    function PrintDiv() {    
+       var divToPrint = document.getElementById('divToPrint');
+       var popupWin = window.open('', '_blank', 'width=300,height=300');
+       popupWin.document.open();
+       popupWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</html>');
+        popupWin.document.close();
+            }
+ </script>
+ <link rel="stylesheet" type="text/css" href="style1.css" />
+ <SCRIPT language=JavaScript>
+var message = "function disabled";
+function rtclickcheck(keyp){ if (navigator.appName == "Netscape" && keyp.which == 3){ alert(message); return false; }
+if (navigator.appVersion.indexOf("MSIE") != -1 && event.button == 2) { alert(message); return false; } }
+document.onmousedown = rtclickcheck;
+</SCRIPT>
+</head>
+<body onLoad="show_clock()">
+ <?php
+include('/includes/header.php');
+?>
+  <div id="mhead"><h2>View Entries</h2></div>
+<?php 
+if (($login_session=='admin')||($login_session=='adm'))
+{
+	?>
+
+
+<form name="tstest" method="post"  id="forms">
+<table id='formtable'  cellspacing="0">
+<tr>
+<td><label for="demo1">Please enter a date here &gt;&gt; </label></td>
+<td><input type="Text" id="demo1" maxlength="25" size="25" name="demo1" /><img src="images/cal.gif" onclick="javascript:NewCssCal('demo1')" style="cursor:pointer"/></td>
+</tr>
+<tr>
+<td><label for="demo1">Please enter a date here &gt;&gt; </label></td>
+<td><input type="Text" id="demo2" maxlength="25" size="25" name="demo2" /><img src="images/cal.gif" onclick="javascript:NewCssCal('demo2')" style="cursor:pointer"/></td>
+</tr>
+<tr>
+<td colspan='2'><input name="submit" type="submit" value="Submit" /></td>
+</tr>
+</table>
+</form>
+<!--<span class="err" style="color:lightseagreen;">Current Date & Time : <?php $date_time=get_curdate_time(); $date_time1 = date("d-M-Y", strtotime($date_time)); $date_time2 = date("h:i a", strtotime($date_time)); echo $date_time1." ".$date_time2; ?></span>-->
+<div id="divToPrint">
+
+<div>
+<table  id='demotable'  cellspacing="0">
+<tr class="head">
+<td>Sr.No.</td>
+<td>Enroll No.</td>
+<td>Name</td>
+<td>Date</td>
+<td>Intime</td>
+<?php 
+if ($a==1){
+?>
+<td>Outtime</td>
+<?php
+}
+else 
+{
+?>
+<td>Out of Lab</td>
+<?php
+}
+?>
+<td>Duration</td>
+<td>Login Terminal</td>
+<?php 
+if ($a==1){
+?><td>Logout Terminal</td>
+<?php 
+}
+?>
+<?php if ($a==2) {?><td colspan='3'>Action</td><?php } ?>
+</tr>
+<?php
+		
+		$aaa=sizeof($entry_data);
+if ($aaa != 0) {
+    
+
+    for ($i=0; $i<$aaa; $i++)
+	{
+		$j=$i+1;
+		$entry_no= $entry_data[$i]['sr_no'];
+		$view_enroll= $entry_data[$i]['enroll_no'];
+        $view_name = get_student_name_by_id($view_enroll);
+		$view_indate=$entry_data[$i]['indate'];
+
+		$view_in_terminal=$entry_data[$i]['login_terminal'];
+		 
+		
+
+		$view_out_terminal=$entry_data[$i]['logout_terminal'];
+		
+		
+		$view_intime = $entry_data[$i]['in_time'];
+				$t= date("h:i a",strtotime($view_intime));
+		$view_outtime = $entry_data[$i]['out_time'];
+		if ($view_outtime == "00:00:00")
+			$t1="";
+		else
+			$t1= date("h:i a",strtotime($view_outtime));
+			  
+		$view_temp_lefttime=get_temp_left_time($entry_no);
+
+	 
+		if ($view_temp_lefttime == "00:00:00")
+			$t5="";
+		else
+			$t5= date("h:i a",strtotime($view_temp_lefttime));
+
+
+		if ($a==1)
+		{
+			//echo $entry_data[$i]['duration'];
+			if (($view_in_terminal=="") && ($view_out_terminal==""))
+		{	
+			$t="";
+			$t1="";
+			echo $dur=$entry_data[$i]['duration'];
+	echo $dura=gmdate("H:i:s", $dur);
+		}
+		else if (($view_outtime == "00:00:00") && ($view_in_terminal<>""))
+				$view_duration=="";
+			else
+				$view_duration=get_time_worked($view_intime, $view_outtime);
+		}
+		else if($a==2)
+		{
+
+			$view_duration=get_time_duration($view_intime);
+		}
+		}
+		?>
+
+       <tr><td><?php echo $j; ?></td><td> <?php echo $view_enroll; ?></td><td><?php echo $view_name; ?></td><td><?php echo $view_indate; ?></td><td><?php echo $t; ?></td>
+	   <?php 
+	   if ($a==1)
+		{
+		   ?>
+	   <td><?php echo $t1; ?></td>
+
+	   <?php
+		}
+	   else
+		{
+		   ?>
+	   <td><?php echo $t5; ?></td>
+	   <?php
+		}
+		   ?>
+	   <td>
+		<?php
+		
+			if ($view_in_terminal == "")
+			{
+				echo $view_duration=$dura;
+			}
+			else 
+			{
+				if ($view_duration['hours']>0)
+				{
+					echo $view_duration['hours']." hours ";
+				}
+				if ($view_duration['minutes']>0)
+				{
+					echo $view_duration['minutes']." minutes ";
+				}
+				echo $view_duration['seconds']."seconds";
+			}
+	
+		
+		?>
+		
+		</td>
+
+		<td><?php echo $view_in_terminal;?></td>
+		<?php 
+		if ($a==1)
+			{
+		?>
+
+		<td><?php echo $view_out_terminal;?></td>	
+		<?php
+			}
+		?>
+	  
+	  <?php if ($a==2) {
+		if ($t5=="")
+		  {
+		?>
+	  <td><a href='get_att.php?entry_no=<?php echo $entry_no; ?>&action=3&enroll=<?php echo $view_enroll; ?>'>Mark Temp. Left</a></td>
+	  <?php
+		  }
+		else
+		  {
+			?>
+	  <td><a href='get_att.php?entry_no=<?php echo $entry_no; ?>&action=4&enroll=<?php echo $view_enroll; ?>'>Mark In</a></td>
+
+	  <?php 
+		  }	  
+	  ?>
+	  <td><a href='get_att.php?entry_no=<?php echo $entry_no; ?>&action=1&enroll=<?php echo $view_enroll; ?>'>Mark Out</a></td>
+	  <td><a href='get_att.php?entry_no=<?php echo $entry_no; ?>&action=2&enroll=<?php echo $view_enroll; ?>'>Disapprove</a></td>
+		<?php
+	  } ?></tr>
+<?php
+    }
+	 
+
+} 
+else
+{
+	echo "<tr><td colspan='10'>No Student Logged In Currently</td></tr>";
+	
+}
+mysql_close($connection); // Closing Connection
+?>
+</table>
+</div>
+</div> <!-- end of divtoPrint -->
+<div id="printbutton">
+  <input type="button" value="Print" onclick="PrintDiv();" />
+</div>
+<?php
+}
+else
+{
+	$error="You are not authorised to view this page";
+}
+
+?>
+<span class="err"><?php echo $error; ?></span>
+
+</body>
+</html>

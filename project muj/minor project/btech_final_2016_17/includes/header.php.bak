@@ -1,0 +1,14 @@
+<p><br /></p>
+<div id="profile">
+<b id="welcome">Welcome : <i><?php echo $login_session; ?></i></b>
+<b id="logout"><a href="logout.php">Log Out</a></b>
+</div>
+
+<?php
+if (($login_session=='admin')||($login_session=='adm'))
+{
+	?>
+<div align="right"><b id="home"><a href="action.php">Home</a></b></div>
+<?php
+}
+	?>

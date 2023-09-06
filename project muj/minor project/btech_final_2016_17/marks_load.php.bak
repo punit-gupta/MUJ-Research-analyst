@@ -1,0 +1,51 @@
+<?php
+require_once ('/includes/db_config.php');
+require_once ('/includes/functions.php');
+$today_date=date("Y-m-d");
+?>
+
+<table  id='demotable'  cellspacing="0">
+<tr  class="head">
+<td>Sr.No</td>
+<td>Enroll No.</td>
+<td>Name</td>
+<td>Supervisor</td>
+<td>Supervisor Marks</td>
+<td>Examiner1</td>
+<td>Marks1</td>
+<td>Examiner2</td>
+<td>Marks2</td>
+<td colspan="2">Total Marks</td>
+</tr>
+<?php
+		
+		$students=get_student_data();
+		$aaa=sizeof($students);
+if ($aaa != 0) {
+    
+
+    for ($i=0; $i<$aaa; $i++)
+	{
+		$j=$i+1;
+		$entry_no= $students[$i]['sr_no'];
+		$view_enroll= $students[$i]['enroll_no'];
+        $view_name = $students[$i]['fname']." ".$students[$i]['lname'];
+		$view_supervisor = $students[$i]['project_supervisor'];
+		$view_supervisor_marks=$students[$i]['T1_supervisor_marks'];
+		$view_examiner1=$students[$i]['T1_Examiner1'];
+		$view_marks1=$students[$i]['T1_Marks1'];
+		$view_examiner2=$students[$i]['T1_Examiner2'];
+		$view_marks2=$students[$i]['T1_Marks2'];
+		$total_marks=$students[$i]['T1_total_marks'];
+		?>
+		<?php
+        echo "<tr><td>".$j."</td><td>".$view_enroll."</td><td>".$view_name."</td><td>".$view_supervisor."</td><td>".$view_supervisor_marks."</td><td>".$view_examiner1."</td><td>".$view_marks1."</td><td>".$view_examiner2."</td><td>".$view_marks2."</td><td>".$total_marks."</td><td><a href='add_midmarks.php?enroll=$view_enroll'>Edit</a></td></tr>";
+		?>
+
+
+		<?php
+    }
+
+} 
+?>
+</table>

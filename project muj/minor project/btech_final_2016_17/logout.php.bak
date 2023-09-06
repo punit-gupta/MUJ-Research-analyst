@@ -1,0 +1,13 @@
+<?php
+		if(isset($_COOKIE['pro_user']) && isset($_COOKIE['pro_pass']))
+		{
+			header('P3P:CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"');
+			setcookie("pro_user", "", time() - self::$CookieExpireDuration, self::$CookiePath, self::$CookieDomain);
+			setcookie("pro_pass", "", time() - self::$CookieExpireDuration, self::$CookiePath, self::$CookieDomain);
+		}
+session_start();
+if(session_destroy()) // Destroying All Sessions
+{
+header("Location: index.php"); // Redirecting To Home Page
+}
+?>

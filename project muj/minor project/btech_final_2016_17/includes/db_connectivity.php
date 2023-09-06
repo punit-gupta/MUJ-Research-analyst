@@ -1,0 +1,15 @@
+<?php	
+//$conn =mysql_connect("localhost", "root", "") or die (mysql_error ());
+//mysql_select_db("btech_final", $conn);
+
+$mysql_hostname = "localhost";  //it can be localhost
+$mysql_password = "";
+$mysql_user = "root";
+$mysql_database = "btech_final_2016_17";
+$instablogs_connect = @mysql_connect($mysql_hostname, $mysql_user, $mysql_password);
+if($instablogs_connect)
+{
+	$db_selected = mysql_select_db($mysql_database, $instablogs_connect);
+}
+error_reporting(E_ALL ^ E_NOTICE);
+?>
