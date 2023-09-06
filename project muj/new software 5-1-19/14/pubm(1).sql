@@ -1,0 +1,210 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.2
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: May 24, 2019 at 11:25 AM
+-- Server version: 10.1.34-MariaDB
+-- PHP Version: 5.6.37
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `pubm`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `backup`
+--
+
+CREATE TABLE `backup` (
+  `name` varchar(300) NOT NULL,
+  `size` varchar(300) NOT NULL,
+  `path` varchar(300) NOT NULL,
+  `date` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `backup`
+--
+
+INSERT INTO `backup` (`name`, `size`, `path`, `date`) VALUES
+('backup-2019-03-18-12-18-35pm', '', 'backup/backup-2019-03-18-12-18-35pm', '2019-03-18-12-18-48pm'),
+('backup-2019-03-18-12-21-41pm', '', 'backup/backup-2019-03-18-12-21-41pm', '2019-03-18-12-21-51pm'),
+('backup-2019-04-06-08-02-03am', '', 'backup/backup-2019-04-06-08-02-03am', '2019-04-06-08-02-59am'),
+('backup-2019-04-06-08-03-00am', '', 'backup/backup-2019-04-06-08-03-00am', '2019-04-06-08-03-16am'),
+('backup-2019-05-14-01-15-07pm', '', 'backup/backup-2019-05-14-01-15-07pm', '2019-05-14-01-15-58pm');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `compare`
+--
+
+CREATE TABLE `compare` (
+  `org` varchar(300) NOT NULL,
+  `citation` int(11) NOT NULL,
+  `document` int(11) NOT NULL,
+  `author` int(11) NOT NULL,
+  `total` int(11) NOT NULL,
+  `journal` int(11) NOT NULL,
+  `conf` int(11) NOT NULL,
+  `book` int(11) NOT NULL,
+  `bookchapter` int(11) NOT NULL,
+  `collaborator` int(11) NOT NULL,
+  `contries` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `compare`
+--
+
+INSERT INTO `compare` (`org`, `citation`, `document`, `author`, `total`, `journal`, `conf`, `book`, `bookchapter`, `collaborator`, `contries`) VALUES
+('JSS', 9268, 1175, 513, 1175, 722, 416, 0, 19, 145, 40),
+('MAHE', 7984, 17887, 1796, 17887, 14816, 1337, 8, 195, 145, 134),
+('MUJ', 1684, 799, 398, 799, 378, 365, 2, 39, 169, 35),
+('s1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+('Sastra', 43392, 7250, 4388, 7250, 6162, 969, 0, 73, 159, 81),
+('Shoolini', 7984, 845, 326, 845, 755, 32, 4, 45, 161, 63);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login`
+--
+
+CREATE TABLE `login` (
+  `name` varchar(100) NOT NULL,
+  `id` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `pass` varchar(100) NOT NULL,
+  `level` varchar(100) NOT NULL,
+  `department` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`name`, `id`, `email`, `pass`, `level`, `department`) VALUES
+('Punit', 'punitg07@gmail.com', 'punitg07@gmail.com', '1234', 'admin', 'Department of Computer and Communication Engineering, Manipal University Jaipur, Jaipur;Department of Computer Science and Engineering, Manipal University Jaipur, Jaipur;Department of Information Technology, Manipal University Jaipur, Jaipur;Department of Chemical Engineering, Manipal University Jaipur, Jaipur;Department of Civil Engineering, Manipal University Jaipur, Jaipur;Department of Fine Arts (Applied Art), Manipal University Jaipur, Jaipur;Department of Mechatronics Engineering, Manipal ');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `project`
+--
+
+CREATE TABLE `project` (
+  `data` varchar(300) NOT NULL,
+  `project` varchar(300) NOT NULL,
+  `path` varchar(300) NOT NULL,
+  `header` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `project`
+--
+
+INSERT INTO `project` (`data`, `project`, `path`, `header`) VALUES
+('muj', 'Manipal University Jaipur', 'MUJPUB', 'MUJPUB');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `yearp`
+--
+
+CREATE TABLE `yearp` (
+  `org` varchar(300) NOT NULL,
+  `year` int(23) NOT NULL,
+  `count` int(32) NOT NULL,
+  `type` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `yearp`
+--
+
+INSERT INTO `yearp` (`org`, `year`, `count`, `type`) VALUES
+('JSS', 2013, 68, ''),
+('JSS', 2014, 78, ''),
+('JSS', 2015, 68, ''),
+('JSS', 2016, 95, ''),
+('JSS', 2017, 79, ''),
+('JSS', 2018, 141, ''),
+('JSS', 2019, 32, ''),
+('MAHE', 2013, 1087, ''),
+('MAHE', 2014, 1174, ''),
+('MAHE', 2015, 1233, ''),
+('MAHE', 2016, 1752, ''),
+('MAHE', 2017, 1957, ''),
+('MAHE', 2018, 2258, ''),
+('MAHE', 2019, 410, ''),
+('MUJ', 2013, 8, ''),
+('MUJ', 2014, 22, ''),
+('MUJ', 2015, 60, ''),
+('MUJ', 2016, 152, ''),
+('MUJ', 2017, 168, ''),
+('MUJ', 2018, 302, ''),
+('MUJ', 2019, 87, ''),
+('Sastra', 2013, 746, ''),
+('Sastra', 2014, 1061, ''),
+('Sastra', 2015, 1032, ''),
+('Sastra', 2016, 870, ''),
+('Sastra', 2017, 873, ''),
+('Sastra', 2018, 920, ''),
+('Sastra', 2019, 202, ''),
+('Shoolini', 2013, 59, ''),
+('Shoolini', 2014, 90, ''),
+('Shoolini', 2015, 80, '');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `backup`
+--
+ALTER TABLE `backup`
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `compare`
+--
+ALTER TABLE `compare`
+  ADD UNIQUE KEY `org` (`org`);
+
+--
+-- Indexes for table `login`
+--
+ALTER TABLE `login`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `project`
+--
+ALTER TABLE `project`
+  ADD UNIQUE KEY `project` (`project`);
+
+--
+-- Indexes for table `yearp`
+--
+ALTER TABLE `yearp`
+  ADD UNIQUE KEY `org` (`org`,`year`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
